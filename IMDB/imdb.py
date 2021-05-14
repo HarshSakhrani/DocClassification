@@ -250,7 +250,7 @@ class Transformer(nn.Module):
   def __init__(self,d_model=768,N=4,heads=8):
     super().__init__()
     self.encoder=Encoder(d_model=768,N=4,heads=8)
-    self.fc=nn.Linear(768,3)
+    self.fc=nn.Linear(768,2)
 
 
   def forward(self,inputEmb,attn_mask):
@@ -279,7 +279,7 @@ for p in model.parameters():
 model.to(device)
 
 softmaxLoss = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(), lr=0.0001) 
+optimizer = optim.Adam(model.parameters(), lr=0.00001) 
 
 def Average(lst): 
     return sum(lst) / len(lst) 
