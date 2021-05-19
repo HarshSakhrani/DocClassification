@@ -1,4 +1,5 @@
 #Importing all the necessary libraries
+#Importing all the necessary libraries
 from pycm import *
 import nltk
 nltk.download('punkt')
@@ -24,36 +25,24 @@ import torchvision.transforms as visionTransforms
 import PIL.Image as Image
 from torchvision.transforms import ToTensor,ToPILImage
 from sklearn import preprocessing
+import tarfile
 from torchtext.utils import download_from_url, extract_archive, unicode_csv_reader
-from torchtext.data.datasets_utils import _RawTextIterableDataset
-from torchtext.data.datasets_utils import _wrap_split_argument
-from torchtext.data.datasets_utils import _add_docstring_header
-from torchtext.data.datasets_utils import _find_match
 from sklearn.model_selection import train_test_split
 import os
 import io
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-URL = 'https://drive.google.com/uc?export=download&id=0Bz8a_Dbh9QhbZlU4dXhHTFhZQU0'
+fname="/root/DocClassification/Yelp/yelp_review_full_csv.tar.gz"
 
-MD5 = 'f7ddfafed1033f68ec72b9267863af6c'
-
-root="/root/DocClassification/Yelp/"
-
-split="train"
-
-NUM_LINES = {
-    'train': 650000,
-    'test': 50000,
-}
-
-_PATH = 'yelp_review_full_csv.tar.gz'
-
-dataset_tar = download_from_url(URL, root=root,
-                                path=os.path.join(root, _PATH),
-                                hash_value=MD5, hash_type='md5')
-extracted_files = extract_archive(dataset_tar)
+if fname.endswith("tar.gz"):
+    tar = tarfile.open(fname, "r:gz")
+    tar.extractall()
+    tar.close()
+elif fname.endswith("tar"):
+    tar = tarfile.open(fname, "r:")
+    tar.extractall()
+    tar.close()
 
 dfTrainOriginal=pd.read_csv("/root/DocClassification/Yelp/yelp_review_full_csv/train.csv",header=None)
 dfTest=pd.read_csv("/root/DocClassification/Yelp/yelp_review_full_csv/test.csv",header=None)
@@ -308,7 +297,7 @@ for p in model.parameters():
 model.to(device)
 
 softmaxLoss = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(), lr=0.0001) 
+optimizer = optim.Adam(model.parameters(), lr=0.00001) 
 
 def Average(lst): 
     return sum(lst) / len(lst) 
