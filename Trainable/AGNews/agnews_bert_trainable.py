@@ -398,7 +398,8 @@ def train_model(model,epochs):
         print("Predictions:-",predictions)
 
         print('Loss: {}  Accuracy: {} %'.format(float(loss), acc))
-
+        print('Batch:',batch_idx)
+        print('Epoch:',i)
     model.eval()
     print("Validating.....")
     for batch_idx,(input,targets,attn_masks) in enumerate(valLoader):
