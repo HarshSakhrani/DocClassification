@@ -30,11 +30,8 @@ import io
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-dfTrainOriginal=pd.read_csv("/root/train.csv",header=None)
-dfTest=pd.read_csv("/root/test.csv",header=None)
-
-dfTrainOriginal=dfTrainOriginal.drop(columns=[1],axis=1)
-dfTest=dfTest.drop(columns=[1],axis=1)
+dfTrainOriginal=pd.read_csv("/root/yelp_review_polarity_csv/train.csv",header=None)
+dfTest=pd.read_csv("/root/yelp_review_polarity_csv/train.csv",header=None)
 
 labelEncoder=preprocessing.LabelEncoder()
 encodedLabelListTrain=(labelEncoder.fit_transform(dfTrainOriginal[0]))
@@ -398,7 +395,8 @@ def train_model(model,epochs):
         print("Predictions:-",predictions)
 
         print('Loss: {}  Accuracy: {} %'.format(float(loss), acc))
-
+        print('Batch:',batch_idx)
+        print('Epoch:',i)
     model.eval()
     print("Validating.....")
     for batch_idx,(input,targets,attn_masks) in enumerate(valLoader):
