@@ -44,13 +44,13 @@ labelEncoder=preprocessing.LabelEncoder()
 encodedLabelListTest=(labelEncoder.fit_transform(dfTest[0]))
 dfTest[0]=encodedLabelListTest
 
-dfTrain,dfVal=np.split(dfTrainOriginal.sample(frac=1, random_state=42), [int(.9 * len(dfTrainOriginal))])
+#dfTrain,dfVal=np.split(dfTrainOriginal.sample(frac=1, random_state=42), [int(.9 * len(dfTrainOriginal))])
 dfTrain=dfTrain.reset_index(drop=True)
 dfTest=dfTest.reset_index(drop=True)
-dfVal=dfVal.reset_index(drop=True)
+#dfVal=dfVal.reset_index(drop=True)
 
 dfTrain.columns=['Label','Text']
-dfVal.columns=['Label','Text']
+#dfVal.columns=['Label','Text']
 dfTest.columns=['Label','Text']
 
 from torch.utils.data import Dataset, DataLoader
@@ -89,11 +89,11 @@ from transformers import BertTokenizer, BertModel
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 docClassificationTrainDataset=DocClassificationDataset(dataframe=dfTrain,bertTokenizer=tokenizer,maxLength=64,device=device)
 docClassificationTestDataset=DocClassificationDataset(dataframe=dfTest,bertTokenizer=tokenizer,maxLength=64,device=device)
-docClassificationValDataset=DocClassificationDataset(dataframe=dfVal,bertTokenizer=tokenizer,maxLength=64,device=device)
+#docClassificationValDataset=DocClassificationDataset(dataframe=dfVal,bertTokenizer=tokenizer,maxLength=64,device=device)
 
 trainLoader=torch.utils.data.DataLoader(docClassificationTrainDataset,batch_size=8,shuffle=True)
 testLoader=torch.utils.data.DataLoader(docClassificationTestDataset,batch_size=8,shuffle=True)
-valLoader=torch.utils.data.DataLoader(docClassificationValDataset,batch_size=8,shuffle=True)
+#valLoader=torch.utils.data.DataLoader(docClassificationValDataset,batch_size=8,shuffle=True)
 
 class BERTOnly(nn.Module):
   def __init__(self,preTrainedBert,embeddingDimension=768,numClasses=2):
@@ -398,10 +398,12 @@ def train_model(model,epochs):
         print("Predictions:-",predictions)
 
         print('Loss: {}  Accuracy: {} %'.format(float(loss), acc))
+        print('Batch:',batch_idx)
+        print('Epoch:',i)
 
     model.eval()
     print("Validating.....")
-    for batch_idx,(input,targets,attn_masks) in enumerate(valLoader):
+    for batch_idx,(input,targets,attn_masks) in enumerate(testLoader):
       
       testBatchCount=testBatchCount+1
 
