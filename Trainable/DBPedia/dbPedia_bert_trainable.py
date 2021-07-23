@@ -30,8 +30,8 @@ import io
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-dfTrainOriginal=pd.read_csv("/root/train.csv",header=None)
-dfTest=pd.read_csv("/root/test.csv",header=None)
+dfTrainOriginal=pd.read_csv("/root/dbpedia_csv/train.csv",header=None)
+dfTest=pd.read_csv("/root/dbpedia_csv/test.csv",header=None)
 
 dfTrainOriginal=dfTrainOriginal.drop(columns=[1],axis=1)
 dfTest=dfTest.drop(columns=[1],axis=1)
@@ -45,7 +45,7 @@ encodedLabelListTest=(labelEncoder.fit_transform(dfTest[0]))
 dfTest[0]=encodedLabelListTest
 
 #dfTrain,dfVal=np.split(dfTrainOriginal.sample(frac=1, random_state=42), [int(.9 * len(dfTrainOriginal))])
-dfTrain=dfTrain.reset_index(drop=True)
+dfTrain=dfTrainOriginal.reset_index(drop=True)
 dfTest=dfTest.reset_index(drop=True)
 #dfVal=dfVal.reset_index(drop=True)
 
